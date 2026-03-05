@@ -478,13 +478,6 @@ export function ResultsPage() {
     return sortedCoins.filter((c) => favoritesSet.has(normalizeSymbol(c.symbol)));
   }, [sortedCoins, showFavoritesOnly, favoritesSet]);
 
-  const favoritesCountInList = useMemo(() => {
-    return sortedCoins.reduce(
-      (acc, c) => acc + (favoritesSet.has(normalizeSymbol(c.symbol)) ? 1 : 0),
-      0
-    );
-  }, [sortedCoins, favoritesSet]);
-
   const queryUpper = query.trim().toUpperCase();
 
   // Debounced remote search
