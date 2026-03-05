@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply antialiased text-neutral-900;
+  }
+  .dark body {
+    @apply bg-neutral-900 text-neutral-100;
+  }
+}
