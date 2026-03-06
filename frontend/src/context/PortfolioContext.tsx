@@ -49,14 +49,14 @@ async function fetchPrices(symbols: string[]): Promise<Record<string, number>> {
       try {
         const s = sym.toUpperCase().endsWith("USDT") ? sym.toUpperCase() : sym.toUpperCase() + "USDT";
         const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${s}`, {
-          signal: AbortSignal.timeout(5000), // 5s timeout — don't hang forever
+          signal: AbortSignal.timeout(5000),
         });
         if (!res.ok) return;
         const data = await res.json();
         const price = parseFloat(data.price);
         if (!isNaN(price)) prices[sym.toUpperCase().replace("USDT", "")] = price;
       } catch {
-        // CORS, network error, or timeout — silently skip, UI shows "Unavailable"
+        // silently skip, UI shows "Unavailable"
       }
     })
   );
@@ -93,7 +93,6 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     } catch {}
   }, [rawEntries]);
 
-  // Keep a ref to rawEntries so the interval always sees the latest value
   const rawEntriesRef = useRef(rawEntries);
   useEffect(() => { rawEntriesRef.current = rawEntries; }, [rawEntries]);
 
@@ -111,7 +110,7 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     } finally {
       if (mountedRef.current) setIsRefreshing(false);
     }
-  }, []); // no deps needed — reads from ref
+  }, []);
 
   // Auto-refresh every 30s when entries exist
   useEffect(() => {

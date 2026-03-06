@@ -55,7 +55,6 @@ export interface CoinRecommendation {
   metrics: CoinMetrics;
 }
 
-// Convenience alias (used in AnalysisContext / modal)
 export type CoinPlan = CoinRecommendation;
 
 export interface AnalyzeResponse {
@@ -77,15 +76,13 @@ export interface AnalyzeResponse {
 // --- Coin lookup (single coin modal / mini page) ---
 
 export interface CoinLookupRequest extends AnalyzeRequest {
-  // user can type "btc", "BTCUSDT", "btc/usdt" etc.
+  // accepts "btc", "BTCUSDT", "btc/usdt", etc.
   symbol: string;
 }
 
 export interface CoinLookupResponse {
-  // a single CoinRecommendation payload (same shape as in AnalyzeResponse.coins[])
   coin: CoinRecommendation;
 
-  // macro metadata (same as AnalyzeResponse)
   risk_state: RiskState;
   risk_reason: string;
   risk_multiplier: number;

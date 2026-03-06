@@ -38,11 +38,8 @@ _BINANCE_SEM = asyncio.Semaphore(6)
 
 app = FastAPI()
 
-# ============================================================
-# .env loader (no dependency)
-# - Fixes "Gemini worked before, now doesn't" when env isn't loaded
-# - It ONLY sets vars that are currently missing.
-# ============================================================
+# .env loader (no python-dotenv dependency)
+# only sets vars that aren't already in the environment
 def _load_dotenv_simple(path: str = ".env") -> None:
     try:
         if not os.path.exists(path):
@@ -153,7 +150,7 @@ FIB_BONUS_MAX = 12.0
 
 # -----------------------------
 # Gemini (macro judge)
-# IMPORTANT: support multiple env var names to avoid "it worked before"
+# supports multiple env var names for the key
 # -----------------------------
 def _first_nonempty(*names: str) -> str:
     for n in names:
@@ -1323,9 +1320,7 @@ async def get_macro_signal(now: datetime) -> Dict[str, Any]:
 
 # ============================================================
 # Build a plan for ONE symbol (used by /api/coin)
-# HARD FIX:
-# - accepts timeframe
-# - tolerates extra kwargs so this error never returns again
+# **kwargs passed through so callers don't break on signature changes
 # ============================================================
 async def build_single_coin_plan(
     symbol_input: str,

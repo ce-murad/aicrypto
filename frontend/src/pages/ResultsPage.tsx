@@ -87,7 +87,7 @@ function RiskDot({ state }: { state: string }) {
   );
 }
 
-/** Backend /api/symbols returns BASE symbols (BTC, ETH, ...) */
+// /api/symbols returns base symbols (BTC, ETH, ...)
 function normalizeSymbol(s: string) {
   const t = (s || "").trim().toUpperCase();
   if (!t) return "";
@@ -138,9 +138,7 @@ function StatCard({
   );
 }
 
-/* =========================
-   FAVORITES (localStorage)
-========================= */
+// favorites (localStorage)
 const FAVORITES_KEY = "ai_crypto_favorites_symbols_v1";
 
 function loadFavorites(): string[] {
@@ -162,12 +160,7 @@ function saveFavorites(items: string[]) {
   }
 }
 
-/* =========================
-   "WHY THIS SIGNAL" (fixed)
-   - removes junk "(, )" leftovers
-   - fixes punctuation like ").,."
-   - keeps bullets for fib/techScore/etc
-========================= */
+// "why this signal" parser
 
 type WhyExplained = {
   summary: string;
@@ -197,7 +190,7 @@ function humanizeKey(key: string): string {
     .replace(/^./, (c) => c.toUpperCase());
 }
 
-/** Extract parentheticals that contain known tokens (fib/techscore/rsi/atr/trend...) */
+// pull parentheticals containing known tokens (fib/techscore/rsi/atr/trend)
 function extractTaggedParentheticals(text: string): { cleaned: string; tags: string[] } {
   const tags: string[] = [];
   const re = /\(([^)]*(?:fib|fibo|fibonacci|techscoreadj|techscore|trend|rsi|atr)[^)]*)\)/gi;
@@ -214,7 +207,7 @@ function extractTaggedParentheticals(text: string): { cleaned: string; tags: str
   return { cleaned, tags };
 }
 
-/** Turn tail tokens like "FibBonus +4, TechScoreAdj 79" into bullets */
+// turn tail tokens like "FibBonus +4, TechScoreAdj 79" into bullets
 function parseKeyValueTokens(tail: string): string[] {
   const parts = (tail || "")
     .split(/[;,]/g)
@@ -261,7 +254,7 @@ function parseKeyValueTokens(tail: string): string[] {
   return bullets;
 }
 
-/** Also scan inline tokens anywhere (handles BTC "old format") */
+// also scan inline tokens (handles older backend reason format)
 function scanInlineTokens(text: string): string[] {
   const bullets: string[] = [];
   const seen = new Set<string>();
@@ -314,7 +307,7 @@ function scanInlineTokens(text: string): string[] {
   return bullets.slice(0, 6);
 }
 
-/** Final pass to clean punctuation/spacing after removals */
+// clean up punctuation/spacing after token removal
 function tidySummary(text: string): string {
   let s = (text || "");
 
@@ -342,7 +335,7 @@ function tidySummary(text: string): string {
   return s;
 }
 
-/** Remove tokens from summary but keep human text */
+// strip known tokens from summary, keep the human-readable text
 function stripInlineTokens(text: string): string {
   return (text || "")
     .replace(/\b(?:fib|fibo|fibonacci)(?:bonus|score)?\s*[:=]?\s*[+\-]?\d+(?:\.\d+)?\b/gi, "")
@@ -380,9 +373,7 @@ function explainWhy(reasonRaw: string): WhyExplained {
   return { summary, bullets };
 }
 
-/* =========================
-   RESULTS PAGE
-========================= */
+// results page
 
 export function ResultsPage() {
   const navigate = useNavigate();
@@ -1323,9 +1314,7 @@ export function ResultsPage() {
   );
 }
 
-/* =========================
-   COIN CARD (TOP-LEVEL!)
-========================= */
+// coin card (top-level component)
 
 type CoinCardProps = {
   coin: CoinRecommendation;

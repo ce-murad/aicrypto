@@ -72,7 +72,6 @@ export function AlertsProvider({ children }: { children: ReactNode }) {
     return () => { mountedRef.current = false; };
   }, []);
 
-  // Stable count of active alerts — avoids inline expression in dep array
   const activeAlertCount = useMemo(
     () => alerts.filter((a) => !a.triggered).length,
     [alerts]
@@ -85,7 +84,6 @@ export function AlertsProvider({ children }: { children: ReactNode }) {
     } catch {}
   }, [alerts]);
 
-  // Keep ref so the interval always sees latest alerts without re-creating
   const alertsRef = useRef(alerts);
   useEffect(() => { alertsRef.current = alerts; }, [alerts]);
 
@@ -138,7 +136,7 @@ export function AlertsProvider({ children }: { children: ReactNode }) {
     return () => {
       if (checkIntervalRef.current) clearInterval(checkIntervalRef.current);
     };
-  }, [activeAlertCount]); // stable number, not an inline expression
+  }, [activeAlertCount]);
 
   const addAlert = useCallback(
     (symbol: string, targetPrice: number, direction: "above" | "below") => {

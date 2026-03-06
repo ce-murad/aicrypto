@@ -27,7 +27,7 @@ interface AnalysisContextValue {
   lastRequest: AnalyzeRequest | null;
   setLastRequest: (req: AnalyzeRequest | null) => void;
 
-  isLoading: boolean;                          // ← new
+  isLoading: boolean;
   runAnalysis: (req: AnalyzeRequest) => Promise<AnalyzeResponse>;
 
   lookupCoin: (symbol: string) => Promise<CoinRecommendation>;
@@ -83,12 +83,12 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
   const [lastRequest, setLastRequestState] = useState<AnalyzeRequest | null>(
     null
   );
-  const [isLoading, setIsLoading] = useState(false);   // ← new
+  const [isLoading, setIsLoading] = useState(false);
 
   const [pinnedSymbols, setPinnedSymbols] = useState<string[]>([]);
   const [uiPrefs, setUiPrefs] = useState<UiPrefs>(DEFAULT_UI);
 
-  // ---- Restore from localStorage (once)
+  // restore from localStorage on mount
   useEffect(() => {
     const restoredResult = safeJsonParse<AnalyzeResponse>(
       localStorage.getItem(LS_KEYS.result)
@@ -119,7 +119,7 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // ---- Persist to localStorage
+  // persist to localStorage
   useEffect(() => {
     try {
       if (result) localStorage.setItem(LS_KEYS.result, JSON.stringify(result));

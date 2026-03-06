@@ -23,10 +23,7 @@ function shouldRetry(err: unknown) {
 
   const status = err.response?.status;
 
-  // Common transient cases:
-  // - No response at all (network / CORS / DNS hiccup)
-  // - Timeout (ECONNABORTED)
-  // - Temporary upstream errors (502/503/504)
+  // retry on network errors and common gateway issues
   return (
     err.code === "ECONNABORTED" ||
     !err.response ||
@@ -40,7 +37,7 @@ async function sleep(ms: number) {
   await new Promise((r) => setTimeout(r, ms));
 }
 
-/** Portfolio analysis (top 4) */
+/** Portfolio analysis (top 4 coins) */
 export async function analyzeInvestment(
   data: AnalyzeRequest
 ): Promise<AnalyzeResponse> {
